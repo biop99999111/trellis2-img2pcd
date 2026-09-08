@@ -31,6 +31,8 @@ OBJ가 필요하면 `textured_model.zip`을 다운로드하고 압축을 풀어 
   Transformers의 torch.load 보안 검사가 2.5.1을 거부하므로 버전을 올리고 CUDA 확장을 강제 재빌드한다.
   검사 함수를 무력화하거나 Transformers를 낮춰 우회하지 않는다.
 - NumPy 1.26.4를 유지한다.
+- Lightning 1.x의 `pkg_resources` 의존성을 위해 setuptools 80.10.2를 사용한다.
+  setuptools 82에서 해당 모듈이 제거됐다. Dino/Lightning 임포트도 `--check`에 포함한다.
 - upstream mesh_utils의 최상위 bpy import만 메모리에서 선택 사항으로 바꾼다.
   Blender GLB 변환은 호출하지 않고 OBJ/MTL/텍스처로부터 trimesh로 PBR GLB를 만든다.
   upstream 소스 파일은 수정하지 않는다.

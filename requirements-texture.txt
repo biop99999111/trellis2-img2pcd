@@ -1,4 +1,6 @@
 -r requirements-hunyuan3d.txt
+# Lightning 1.x still imports pkg_resources, removed in setuptools 82.
+setuptools==80.10.2
 # setup_texture.sh installs these from the official cu124 wheel index first.
 torch==2.6.0
 torchvision==0.21.0

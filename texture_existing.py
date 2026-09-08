@@ -72,6 +72,11 @@ def load_paint_modules(root):
         raise RuntimeError('Missing meshVerticeInpaint extension')
     from realesrgan import RealESRGANer
     import xatlas
+    # Dino_v2 imports Lightning lazily during model loading. Check that chain
+    # now so missing pkg_resources/Lightning dependencies fail before weights load.
+    importlib.import_module('pkg_resources')
+    importlib.import_module('pytorch_lightning')
+    importlib.import_module('hunyuanpaintpbr.unet.modules')
     return pipeline
 
 
