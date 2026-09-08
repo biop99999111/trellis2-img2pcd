@@ -1,3 +1,7 @@
 -r requirements-hunyuan3d.txt
+# setup_texture.sh installs these from the official cu124 wheel index first.
+torch==2.6.0
+torchvision==0.21.0
+torchaudio==2.6.0
 trimesh>=4.6,<5
 fast-simplification>=0.1.9,<0.2

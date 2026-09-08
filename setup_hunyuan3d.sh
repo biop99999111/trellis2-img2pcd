@@ -52,7 +52,7 @@ source "$CONDA_BASE/etc/profile.d/conda.sh"
 
 echo
 echo "=== 2. conda env '$ENV_NAME' (python 3.10) ==="
-# TRELLIS.2 env(torch 2.6)와 섞지 않는다 — Hunyuan3D 는 torch 2.5.1 을 쓴다.
+# Keep model environments separate. torch >=2.6 is required by current Transformers checkpoint loading.
 if conda env list | awk '{print $1}' | grep -qx "$ENV_NAME"; then
   echo "이미 있음: $ENV_NAME"
 else
@@ -71,14 +71,14 @@ fi
 cd "$HY_DIR"
 
 echo
-echo "=== 4. torch 2.5.1 (cu124) ==="
-pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 \
+echo "=== 4. torch 2.6.0 (cu124) ==="
+pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 \
   --index-url https://download.pytorch.org/whl/cu124
 
 echo
 echo "=== 5. requirements ==="
 # basicsr 은 소스 tarball 이라 빌드 격리 환경이 torch 를 **다시** 내려받는다(~2.5GB).
-# env 에 이미 torch 2.5.1 이 있으므로 격리를 끄고 그걸 재사용한다.
+# env 에 이미 torch 2.6.0 이 있으므로 격리를 끄고 그걸 재사용한다.
 pip install cython
 
 # bpy==4.0 은 PyPI 에서 내려갔다. 남아 있는 최소 버전은 4.2.0 이고 python>=3.11 만

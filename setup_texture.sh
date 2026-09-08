@@ -14,10 +14,11 @@ if [ -z "${CUDA_HOME:-}" ] && [ -d /usr/local/cuda ]; then
 fi
 command -v nvcc >/dev/null || { echo 'nvcc required: use a CUDA devel template'; exit 1; }
 test -f "$HY_DIR/hy3dpaint/textureGenPipeline.py" || { echo "Missing Hunyuan source: $HY_DIR"; exit 1; }
+python -m pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu124
 python -m pip install -r "$PROJECT_DIR/requirements-texture.txt"
 python -m pip install pybind11 ninja
 # ABI-specific extensions must use this environment's Python/torch.
-(cd "$HY_DIR/hy3dpaint/custom_rasterizer" && python -m pip install --no-build-isolation -e .)
+(cd "$HY_DIR/hy3dpaint/custom_rasterizer" && python setup.py build_ext --inplace --force && python -m pip install --no-deps --no-build-isolation -e .)
 (cd "$HY_DIR/hy3dpaint/DifferentiableRenderer" && bash compile_mesh_painter.sh)
 mkdir -p "$HY_DIR/hy3dpaint/ckpt"
 CHECKPOINT="$HY_DIR/hy3dpaint/ckpt/RealESRGAN_x4plus.pth"

@@ -28,8 +28,16 @@ def optional_blender_source(source, filename):
     return compile(ast.fix_missing_locations(tree), filename, 'exec')
 
 
+def require_supported_torch(version):
+    from packaging.version import Version
+    if Version(version.split('+')[0]) < Version('2.6.0'):
+        raise RuntimeError('Texture checkpoint loading requires torch >=2.6.0. Run bash setup_texture.sh; do not bypass the torch.load safety check.')
+
+
 def load_paint_modules(root):
     """Compatibility is scoped to this process; upstream files are not edited."""
+    import torch
+    require_supported_torch(torch.__version__)
     root = Path(root).resolve()
     paint_root = root / 'hy3dpaint'
     sys.path.insert(0, str(paint_root))

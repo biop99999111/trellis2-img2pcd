@@ -8,10 +8,16 @@ from PIL import Image
 import trimesh
 from trimesh.visual.texture import TextureVisuals
 from trimesh.visual.material import SimpleMaterial
-from texture_existing import export_pbr_glb, optional_blender_source
+from texture_existing import export_pbr_glb, optional_blender_source, require_supported_torch
 
 
 class TextureTests(unittest.TestCase):
+    def test_unsafe_torch_rejected_before_model_loading(self):
+        with self.assertRaisesRegex(RuntimeError, 'setup_texture.sh'):
+            require_supported_torch('2.5.1+cu124')
+        require_supported_torch('2.6.0+cu124')
+        require_supported_torch('2.7.1')
+
     def test_optional_bpy_keeps_mesh_code(self):
         scope = {}
         with patch.dict('sys.modules', {'bpy': None}):
