@@ -1,5 +1,8 @@
 # trellis2-img2pcd
 
+이미 생성된 `mesh.glb`에 사진의 색상·질감을 입히려면 [기존 메시 텍스처 생성 안내](TEXTURE.md)를 참고하세요.
+`texture_existing.py`는 형상을 다시 생성하지 않고 OBJ/MTL/PBR 텍스처와 GLB를 만듭니다.
+
 **자동차 부품 사진 1장 → 3D → mm 스케일 점군(`.pcd`)** 이 실제로 되는지 검증한 스파이크.
 
 합성 결함 데이터 PoC(`bumper-synth`)가 부품 3D 에셋을 필요로 하는데, 그걸 **3D 스캐너 대신

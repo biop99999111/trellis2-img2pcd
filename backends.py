@@ -447,25 +447,20 @@ class Hunyuan3DBackend:
         _free_cuda()
         print("[gen] shape 파이프라인 해제 -> texture 로드")
 
-        from textureGenPipeline import Hunyuan3DPaintConfig, Hunyuan3DPaintPipeline
+        from texture_existing import paint_existing
+        import shutil
 
-        t1 = time.time()
-        cfg = Hunyuan3DPaintConfig(max_num_view=st.paint_views, resolution=st.paint_resolution)
-        paint = Hunyuan3DPaintPipeline(cfg)
-        result = paint(str(shape_glb), image_path=str(prepared), output_mesh_path=str(out_glb))
-        t_tex = time.time() - t1
-        produced = Path(result) if isinstance(result, (str, Path)) else out_glb
-        if produced != out_glb and produced.exists():
-            produced.replace(out_glb)
-        peak_tex = _peak_vram()
-        print(f"[gen] texture in {t_tex:.1f}s (peak {peak_tex:.2f} GiB) -> {out_glb}")
-
-        del paint
+        texture_out = out_glb.parent / 'paint'
+        painted = paint_existing(shape_glb, prepared, texture_out, self.root,
+                                 views=st.paint_views, resolution=st.paint_resolution,
+                                 texture_size=st.texture_size)
+        shutil.copy2(texture_out / 'textured_mesh.glb', out_glb)
         _free_cuda()
         info.update(
-            t_texture_s=round(t_tex, 2),
-            peak_vram_texture_gib=round(peak_tex, 2),
+            t_texture_s=painted['elapsed_seconds'],
+            peak_vram_texture_gib=painted['peak_vram_gib'],
             textured=True,
+            texture_validation=painted,
         )
         return info
 
